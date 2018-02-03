@@ -1,6 +1,15 @@
 var directionDisplay
-var directionsService = new google.maps.DirectionsService()
+var directionsService
 var map
+
+
+/**
+ * PLEASE JUST CALL THIS FUNCTION UPON PAGE LOAD THANKS
+ */
+
+function setDirectionsService(){
+    directionService = new google.maps.DirectionsService()
+}
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -13,6 +22,7 @@ var map
  */
 
 function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
+    setDirectionsService()
     var start = new google.maps.LatLng(startLng, startLat)
     var end = new google.maps.LatLng(destLng, destLat)
     var service = new google.maps.DistanceMatrixService();
@@ -73,7 +83,7 @@ function getMapFromPlaces(places){
         origin: startPt,
         destination: endPt,
         travelMode: 'WALKING',
-        waypoints[]: stopPts
+        waypoints: stopPts
     }
     directionsService.route(request, function(response, status){
         if (status == 'OK'){
@@ -91,8 +101,8 @@ function initializeMap(lngLatArr){
     directionDisplay = new google.maps.DirectionsRenderer()
     var centerPt = new google.maps.LatLng(lngLatArr[0], lngLatArr[1])
     var mapOptions = {
+        center: {lat: lngLatArr[0], lng: lngLatArr[1]},
         zoom: 7
-        center: centerPt
     }
     map = new google.maps.Map(document.getElementById('map'), mapOptions) // set div name to map
     directionDisplay.setMap(map)
