@@ -24,15 +24,15 @@
         </div>
         <div class = "container">
           <div id = "topBar">
-            <h1>Kill Time</h1>
+          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Kill Time </span></h1>
           </div>
           <nav>
             <ul>
-              <li><a href = "index.html">Home</a></li>
-              <li><a href = "about.html">About</a></li>
-              <li><div style="font-size:2em; color:Tomato">
+              <li class = "current"><a href = "index.html">Home</a></li>
+              <li class = "current"><a href = "about.html">About</a></li>
+              <li><div style="font-size:4em; color:Tomato">
                 <a class="loginButton" href="OUR LOGIN PAGE">
-                  <i class="fa fa-user-o" aria-hidden="true"></i>
+                  <i class="fa fa-user fa-2x" aria-hidden="true"></i>
               </div></a></li>
             </ul>
           </nav>
@@ -50,23 +50,31 @@
       <section id = "userInput">
         <div class = "container">
           <form>
-            <input type = "text" placeholder="Starting position:">
+            <input type = "search" placeholder="Starting position:">
             <input type = "datetime-local">
           </form>
           <br>
           <form>
-            <input type = "text" placeholder="Ending position:">
+            <input type = "search" placeholder="Ending position:">
             <input type = "datetime-local">
           </form>
           <br>
           <form>
+            <input type = "hidden" placeholder="Forms of interests:">
+          </form>
+          <br>
+          <form action="/">
+              <input type="checkbox" name="Box1" value="food">Food<br>
+              <input type="checkbox" name="Box2" value="shopping">Shopping<br>
+              <input type="checkbox" name="Box3" value="coffee">Coffee<br>
+              <input type="submit" value="Submit">
           </form>
         </div>
       </section>
 
       <!--More promotion!-->
       <section id = "boxes">
-        <p><h3> -------- Get -------- </h3></p>
+        <div><h3> -------- Get -------- </div></p>
 
         <div class = "container">
           <div class = "box">
@@ -82,7 +90,7 @@
             <p>Fun events</p>
           </div>
         </div>
-        <p><h3>in your spare time!!</h3></p>
+        <div><h3>in your spare time!!</h3></div>
       </section>
 
       <footer>
