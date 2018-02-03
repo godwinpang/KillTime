@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Meta -->
-    <meta charset = "utf-8">
-    <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
-    <meta name = "viewport" content="width=device-width, initial-scale=1">
-    <!-- Page title -->
-    <title> KillTime | Welcome </title>
-    <link rel = "stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-</head>
+    <head>
+        <!-- Meta -->
+        <meta charset = "utf-8">
+        <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
+        <meta name = "viewport" content="width=device-width, initial-scale=1">
+        <!-- Page title -->
+        <title> KillTime | Welcome </title>
+        <link rel = "stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="script.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&callback=initMap"
+        async defer></script>
+    </head>
 
     <body>
       <!--The header bar of outwebpage !-->
@@ -36,7 +37,7 @@
 
 
       <!--The user input!-->
-      <section id = "userInput">
+    <section id = "userInput">
         <div class = "container">
             <input onClick="this.select();" id="startLocation" type="text" value="Starting location:" readonly>
             <input id="startTime" type="datetime-local">
@@ -44,27 +45,20 @@
             <input onClick="this.select();" id="endLocation" type="text" value="Ending location:" readonly>
             <input id="endTime" type="datetime-local">
         </div>
-</section>
+    </section>
 
-        <!--THIS IS THE PLACE TO INSERT THE MAP!-->
-        <span>
-          <iframe
-            width="600"
-            height="450"
-            frameborder="0" style="border:0"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCFW8ILUdqOlhzHDUw_ZFti60XI7DtfsYo
-              &q=Space+Needle,Seattle+WA" allowfullscreen>
-          </iframe>
-</span>
-        <span class = "container">
-          <select name="places" size="4" multiple>
-            <option value="Food">Food</option>
-            <option value="Beauty">Beauty</option>
-            <option value="Parks">Parks</option>
-            <option value="Store">Store</option>
-          </select>
-        </span>
-      </div>
+    <!--THIS IS THE PLACE TO INSERT THE MAP!-->
+    <div id = "map"></div>
+
+    <span class = "container">
+      <select name="places" size="4" multiple>
+        <option value="Food">Food</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Parks">Parks</option>
+        <option value="Store">Store</option>
+      </select>
+    </span>
+
 
 
       <!--More promotion!-->
