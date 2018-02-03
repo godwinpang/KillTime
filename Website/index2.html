@@ -18,8 +18,8 @@
       <header>
         <div class = "container">
           <div id = "topBar">
-          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Kill Time </span></h1>
-          </div>
+          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Kill Time </span></h1> Find things to do while you wait!
+
           <nav>
             <ul>
               <li class = "current"><a href = "index.html">Home</a></li>
@@ -30,40 +30,42 @@
               </div></a></li>
             </ul>
           </nav>
+          </div>
         </div>
       </header>
 
-      <!--The description of the web -->
-      <section id = "description">
-        <div class = "container">
-          <h1>Some promotion line </h1>
-        </div>
-      </section>
 
       <!--The user input!-->
       <section id = "userInput">
         <div class = "container">
-            <input type = "search" placeholder="Starting position:" >
-            <input type = "datetime-local">
-            <input type = "search" placeholder="Ending position:">
-            <input type = "datetime-local">
-
-          <form action="/">
-              <input type="checkbox" name="Box1" value="food">Food<br>
-              <input type="checkbox" name="Box2" value="shopping">Shopping<br>
-              <input type="checkbox" name="Box3" value="coffee">Coffee<br>
-              <input type="submit" value="Submit">
-          </form>
-
+            <input onClick="this.select();" id="startLocation" type="text" value="Starting location:" readonly>
+            <input id="startTime" type="datetime-local">
+          </br>
+            <input onClick="this.select();" id="endLocation" type="text" value="Ending location:" readonly>
+            <input id="endTime" type="datetime-local">
         </div>
+</section>
 
         <!--THIS IS THE PLACE TO INSERT THE MAP!-->
-        <div>
+        <span>
+          <iframe
+            width="600"
+            height="450"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCFW8ILUdqOlhzHDUw_ZFti60XI7DtfsYo
+              &q=Space+Needle,Seattle+WA" allowfullscreen>
+          </iframe>
+</span>
+        <span class = "container">
+          <select name="places" size="4" multiple>
+            <option value="Food">Food</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Parks">Parks</option>
+            <option value="Store">Store</option>
+          </select>
+        </span>
+      </div>
 
-
-
-        </div>
-      </section>
 
       <!--More promotion!-->
       <section id = "boxes">
@@ -72,15 +74,15 @@
         <div class = "container">
           <div class = "box">
             <img src = "./img/food.jpg">
-            <p style>Good food</p>
+            <p style>Good Food</p>
           </div>
           <div class = "box">
             <img src = "./img/shopping.jpg">
-            <p>Nice shops</p>
+            <p>Nice Shops</p>
           </div>
           <div class = "box">
             <img src = "./img/events.jpeg">
-            <p>Fun events</p>
+            <p>Fun Events</p>
           </div>
           <div class = "box">
             <img src = "./img/spa.jpg">
@@ -88,7 +90,11 @@
           </div>
           <div class = "box">
             <img src = "./img/coffee.jpg">
-            <p style>Quiet bookstores</p>
+            <p style>Quiet Bookstores</p>
+          </div>
+          <div class = "box">
+            <img src = "./img/nature.jpg">
+            <p style>Fresh Air</p>
           </div>
         </div>
         <div style="text-align:center; font-size: 20 px; font-style:italic"><h3>in your spare time!!</h3></div>
