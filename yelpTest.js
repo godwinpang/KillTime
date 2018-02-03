@@ -1,50 +1,32 @@
+'use strict'
+
+const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
+const API_HOST = "https://api.yelp.com";
+const SEARCH_PATH = "/v3/businesses/search";
+const BUSINESS_PATH = "/v3/businesses/";
+const TOKEN_PATH = "/oauth2/token";
+const GRANT_TYPE = "client_credentials";
+
+const ACCESS_TOKEN = "g9p9BLtkh5mMy0q5hq4OES-H7hbCWetuC-AH0lWKvkcp4diO2unHx_HoxkgAg5Nl7LcJplMUJk_UGoEK9t6hVFodDefdHqcHc21qcA6qdaph4ZzBQjp5Awzla4B1WnYx";
 
 
-var searchResults; 
-
-
-var keyword = 'peking duck';
+// Global variables (with default values)
+var keyword = 'food';
 var latitude = 33.6490126;
 var longitude = -117.8427879;
-var radius = 4000;
+var radius = 40; // in meters
 
-$(function () {
+var searchResults;
+var businessDetails;
 
-var PROXY_URL = "https://cors-anywhere.herokuapp.com/";
-var API_HOST = "https://api.yelp.com";
-var SEARCH_PATH = "/v3/businesses/search";
-var BUSINESS_PATH = "/v3/businesses/";
-var TOKEN_PATH = "/oauth2/token";
-var GRANT_TYPE = "client_credentials";
+// Updates the global variables with the data inputted by the user
+function retrieveParams() {
 
-var CLIENT_ID = "0nz4Z_fUc4ZJOU_SDrOtdQ";  // dummy id for stackoverflow purposes
-var CLIENT_SECRET = "1ud5K7yLjfODbKCoAxKxIOLvyFlr9YboP5aNxyQgYhAWup1RXxa2bIOEkIHT86nF";  // dummy secret for stackoverflow purposes
-var ACCESS_TOKEN = "g9p9BLtkh5mMy0q5hq4OES-H7hbCWetuC-AH0lWKvkcp4diO2unHx_HoxkgAg5Nl7LcJplMUJk_UGoEK9t6hVFodDefdHqcHc21qcA6qdaph4ZzBQjp5Awzla4B1WnYx";
+}
 
-
-
-
-$.ajax(PROXY_URL + API_HOST + TOKEN_PATH, {
-    type: "POST",
-    data: {
-        grant_type: GRANT_TYPE,
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET
-    },
-    contentType: "application/x-www-form-urlencoded",
-    dataType: "json",
-    success: function (data) {
-        console.log(data);
-
-    },
-    error: function () {
-        console.log("post call error");
-    }
-
-
-  })
-
-$.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
+// Updates the searchResults data object with data from Yelp API
+function updateSearchResults(callback) {
+  $.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
     type: "GET",
     data: {
       term: keyword,
@@ -57,27 +39,39 @@ $.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
     headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
     success: function(data) {
       console.log(data);
-      searchResults = data; 
-      $.ajax(PROXY_URL + API_HOST + BUSINESS_PATH + searchResults.businesses[4].id, {
-        type: "GET",
-        contentType: "application/x-www-form-urlencoded",
-        dataType: "json",
-        headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
-        success: function(data2) {
-          console.log("business data: ");
-          console.log(data2);
-        },
-        error: function() {
-          console.log("get call error");
-        }
-      })
+      searchResults = JSON.parse(JSON.stringify( data ));
+      callback();
     },
     error: function() {
       console.log("get call error");
     }
   })
 
+}
 
+// Updates the business details (call after updateSearchResults has been called)
+function getBusinessDetails() {
+  businessDetails = [{}];
+
+  console.log("in getBusinessDetails: " + searchResults.businesses[1].name);
+
+  for(var i = 0; i < searchResults.businesses.length; i++) {
+    $.ajax(PROXY_URL + API_HOST + BUSINESS_PATH + searchResults.businesses[i].id, {
+      type: "GET",
+      contentType: "application/x-www-form-urlencoded",
+      dataType: "json",
+      headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
+      success: function(data2) {
+        businessDetails = businessDetails.concat(data2);
+      },
+      error: function() {
+        console.log("get call error");
+      }
+    })
+  }
+}
+
+// Main
+$(function () {
+     updateSearchResults(getBusinessDetails);
 });
-
-
