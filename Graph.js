@@ -99,8 +99,9 @@ function isOpen(open, close, t, duration) {
 function copyArrWithout(a, val) {
     retArr = [];
     for (i = 0; i < a.length; i++) {
-        if (a[i] === val) continue;
-        retArr.push(a[i]);
+        if (!(a[i][0] === val)) {
+            retArr.push(a[i]);
+        }
     }
     return retArr;
 }
@@ -134,26 +135,25 @@ function branch(name1, name2, t0, tn, list, score) {
     smaller = copyArrWithout(list, name1);
 
     // Iterates over all the remaining nodes
-    for (i = 0; i < list.length; i++) {
+    for (i = 0; i < smaller.length; i++) {
 
         // Calculate the time to reach the node
-        elapsedTime = t0 + getEdge(name1, list[i][0]);
+        elapsedTime = t0 + getEdge(name1, smaller[i][0]);
 
         // Check if the node is "open" when we visit it
-        if (isOpen(list[i][1], list[i][2], elapsedTime, list[i][3])) {
+        if (isOpen(smaller[i][1], smaller[i][2], elapsedTime, smaller[i][3])) {
 
             // Account the duration we stay at the node
-            elapsedTime = elapsedTime + list[i][3];
+            elapsedTime = elapsedTime + smaller[i][3];
 
             // Continue if we are still within the time limit
             if (elapsedTime < tn) {
 
                 // Recurse on the node with a smaller node list
-                retVal = branch(list[i][0], name2, elapsedTime, tn, smaller, newScore);
+                retVal = branch(smaller[i][0], name2, elapsedTime, tn, smaller, newScore);
 
                 // Check if there was a return value
                 if (retVal && retVal.length > 1) {
-
                     // Build the path
                     retVal.push(name1);
                     options.push(retVal);
