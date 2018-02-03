@@ -15,19 +15,31 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
 
     service.getDistanceMatrix(
         {
-            origins: start,
-            destinations: end,
-            travelMode = 'WALKING',
+            origins: [start],
+            destinations: [end],
+            travelMode : 'WALKING'
 
         }, callback);
 
     function callback(response, status){
         if (status == 'OK'){
+            var origins = response.originAddresses
+            var destinations = response.destinationAddresses
+
             var result = response.rows[0].elements
             var element = result[0]
-            return element.duration.text
-        } else {
-            return -1;
+            var duration = element.duration.value
+            var distance = element.distance.text
+            var from = origins[0]
+            var to = destinations[0]
+            console.log("duration: " + duration)
+
         }
     }
 }
+/*
+function testFunc(startLng, startLat, destLng, destLat){
+    console.log(getTimeBetweenTwo(startLng, startLat, destLng, destLat))
+    document.getElementById('hi').innerHTML = getTimeBetweenTwo(startLng, startLat, destLng, destLat)
+}
+*/
