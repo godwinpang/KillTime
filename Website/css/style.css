@@ -127,3 +127,27 @@ header a: hover{
   height: 25px;
   width: 250px;
 }
+
+/* Three Boxes*/
+#boxes {
+  margin-top: 20px;
+}
+
+#boxes .box {
+  border: #cccccc solid 1px;
+  text-align: center;
+  font-weight: bold;
+  color: gray;
+  float: left;
+  width: 30%;
+  padding: 10px;
+  background: #e6e6e6;
+  margin-bottom: 5px;
+}
+
+/* The image of each box */
+#boxes .box img{
+  width: 200px;
+  height: 150px;
+
+}
