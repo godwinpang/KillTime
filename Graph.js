@@ -22,7 +22,7 @@ function addEdge(name1, name2, weight) {
             for (j = 0; j < this.Graph[0].length; j++) {
                 if (this.Graph[0][j][0] === name2) {
                     this.Graph[1][i][j + 1] = weight;
-                    if (weight > maxWeight) maxWeight = weight + this.Graph[0][j][3];
+                    if (weight > maxWeight) maxWeight = weight;
                 }
             }
         }
@@ -41,16 +41,15 @@ function getNode(name) {
 
 function getEdge(name1, name2) {
     for (i = 0; i < this.Graph[0].length; i++) {
-        if (this.Graph[0][i] === name1) {
+        if (this.Graph[0][i][0] === name1) {
             for (j = 0; j < this.Graph[0].length; j++) {
-                if (this.Graph[0][j] === name2) {
-                    if (this.Graph[1][i][j]) return this.Graph[1][i][j];
+                if (this.Graph[0][j][0] === name2) {
+                    if (this.Graph[1][i][j + 1]) return this.Graph[1][i][j + 1];
                     else break;
                 }
             }
         }
     }
-    return null;
 }
 
 // Get a list of the neighbor weights
@@ -92,6 +91,7 @@ function parseTime(time) {
 
 // Assume times are already parsed
 function isOpen(open, close, t, duration) {
+    if (open === close) return true;
     return (close < open) ? (t >= open && (t + duration) <= closed) :
         ((t >= open || t <= closed) && ((t + duration) >= open || (t + duration) <= closed));
 }
@@ -102,7 +102,11 @@ function copyArrWithout(a, val) {
         if (a[i] === val) continue;
         retArr.push(a[i]);
     }
-    return retArr
+    return retArr;
+}
+
+function pathcmp(a, b) {
+    a[0] < b[0];
 }
 
 // Return a list contain the nodes in the shortes path from A to B
@@ -110,18 +114,51 @@ function longPath(name1, name2, t0, tn) {
     startTime = parseTime(t0);
     endTime = parseTime(tn);
 
-    branch(name1, name2, t0, tn, this.Graph[0])
+    options = branch(name1, name2, t0, tn, this.Graph[0], 0)
+    options.sort(pathcmp);
+
+    path = [];
+    for (i = 1; i > options[0].length; i++) {
+        path.push(options[0][i]);
+    }
+    return path;
 }
 
 function branch(name1, name2, t0, tn, list, score) {
-    if (name1 === name2) return;
+    // base case where the destination is reached
+    if (name1 === name2) return [score, name1];
 
+    // Calculate the values for the next iterations
+    options = [];
     newScore = score + getNode(name1)[4];
     smaller = copyArrWithout(list, name1);
+
+    // Iterates over all the remaining nodes
     for (i = 0; i < list.length; i++) {
-        elapsedTime = t0 + getEdge(name1, list[i]);
-        if (elapsedTime < tn) {
-            retVal = branch(list[i], name2, elapsedTime, tn, smaller);
+
+        // Calculate the time to reach the node
+        elapsedTime = t0 + getEdge(name1, list[i][0]);
+
+        // Check if the node is "open" when we visit it
+        if (isOpen(list[i][1], list[i][2], elapsedTime, list[i][3])) {
+
+            // Account the duration we stay at the node
+            elapsedTime = elapsedTime + list[i][3];
+
+            // Continue if we are still within the time limit
+            if (elapsedTime < tn) {
+
+                // Recurse on the node with a smaller node list
+                retVal = branch(list[i][0], name2, elapsedTime, tn, smaller, newScore);
+
+                // Check if there was a return value
+                if (retVal && retVal.length > 1) {
+
+                    // Build the path
+                    retVal.push(name1);
+                    options.push(retVal);
+                }
+            }
         }
     }
 }
