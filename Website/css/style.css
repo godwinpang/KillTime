@@ -1,0 +1,129 @@
+
+@import 'bootstrap.min.css';
+@import 'animate.css';
+@import 'font-awesome.min.css';
+@import 'owl.carousel.css';
+@import 'owl.theme.css';
+@import 'magnific-popup.css';
+
+body {
+   font: 15px/1.5 Arial, Helvetica, sans-serif;
+   padding: 0;
+   margin: 0;
+   background: #fdf3e5;
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+/* Header Comment*/
+header{
+  background: #b3b9b7;
+  color: #ffffff;
+  padding-top: 20px;
+  min-height: 50px;
+  border-bottom: #e8c00e 3px solid;
+}
+
+header a{
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+
+header h1 {
+  font-size: 50px;
+  margin: 0 0 0 0;
+}
+
+header li {
+  float: left;
+  display: inline;
+  padding: 0 20px 0 20px;
+}
+
+header #userInput{
+  float: left;
+}
+
+header nav{
+  float: right;
+  margin-top: 10px;
+}
+
+
+
+header .highlight, header .current a{
+  color: #e8491d;
+  font-weight: bold;
+  font-family: fantasy;
+}
+
+header a: hover{
+  color: #cccccc;
+  font-weight: bold;
+}
+
+
+
+/*
+ The loginButton style
+*/
+.loginButton {
+    color: #e8c00e;
+    border: 1px solid #e8c00e;
+    border-radius: 50%;
+    padding: 18px 25px;
+    width: 20px;
+    height: 30px;
+    top: 20px;
+    right: 20px;
+    float: right;
+    margin: 10px;
+    font-size: 25px;
+    font-weight: 100;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+  color: #ffffff;
+  background-color: #e8c00e;
+  border-radius: 5px solid #e8c00e;
+}
+
+#description{
+  min-height:400px;
+  background:url('../img/coffeePlace.jpg') no-repeat 0 -100px;
+  text-align:center;
+  color: #ffffff;
+
+}
+
+#userInput{
+  padding: 15px;
+  color: #ffffff;
+  background: #35424a;
+}
+
+#userInput form {
+   float: right;
+   margin-top: 15px;
+}
+
+#userInput input [type = "search"]{
+  width: 100%;
+  padding: 4px;
+  height: 25px;
+  width: 250px;
+}
