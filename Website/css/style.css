@@ -1,13 +1,14 @@
 
-@import 'bootstrap.min.css';
+/*@import 'bootstrap.min.css';
 @import 'animate.css';
 @import 'font-awesome.min.css';
 @import 'owl.carousel.css';
 @import 'owl.theme.css';
 @import 'magnific-popup.css';
+*/
 
 #map {
-    height: 62vh;
+    height: 80vh;
     width: 80%;
     margin-right: auto;
     margin-left: auto;
@@ -44,7 +45,7 @@ header{
   background-image: url("../img/hiking.jpg");
   font-family: fantasy;
   font-weight: bold;
-  height: 150px;
+  height: 120px;
 
 }
 

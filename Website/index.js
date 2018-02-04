@@ -37,13 +37,12 @@ var endLocation = document.getElementById("endLocation");
 var endTimeElem = document.getElementById("endTime");
 var submitButton = document.getElementById("submitButton");
 var keywordsArea = document.getElementById("keywords");
-<<<<<<< HEAD
+
 var QTimeCode = document.getElementById("QTimeCode");
-=======
+
 
 submitButton.addEventListener("click", retrieveParams);
 
->>>>>>> refs/remotes/origin/master
 var paramsValid = false;
 
 
