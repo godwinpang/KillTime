@@ -3,6 +3,8 @@ var map
 var startMarker
 var endMarker
 var centerPt
+var directionsDisplay = new google.maps.DirectionsRenderer
+var directionsService = new google.maps.DirectionsService
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -39,7 +41,7 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
  * order of places to be visited.
  */
 
-function getMapFromPlaces(directionsService, directionsDisplay, places){
+function getMapFromPlaces(places){
     var stops = new Array(places.length-2)
     for (i = 0 ; i < stops.length ; i++){
         stops[i] = new Array(2)
@@ -73,14 +75,35 @@ function getMapFromPlaces(directionsService, directionsDisplay, places){
     })
 }
 
+function arrToStr(arr){
+    var retStr = ""
+    for (i = 0 ; i < arr.length ; i++){
+        retStr = retStr.concat(arr[i])
+        if (i != arr.length - 1){
+            retStr = retStr.concat("+")
+        }
+    }
+    return retStr
+}
+
+function strToArr(str){
+    var arrLatLngPairs = str.split('+')
+    var retArr = new Array(arrLatLngPairs.length)
+    for (i = 0 ; i < retArr.length ; i++){
+        retArr[i] = new Array(2)
+    }
+    for (j = 0 ; j < retArr.length ; j++){
+        retArr[i] = str.split(arrLatLngPairs[i])
+    }
+    return retArr
+}
+
 /**
  * This function takes in an array storing the longitude latitude pair of where
  * the map should be centered around. It then initializes a map for the map.
  */
 
 function initMap(){
-    var directionsDisplay = new google.maps.DirectionsRenderer
-    var directionsService = new google.maps.DirectionsService
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
         center: {lat: 33.653334, lng: -117.839316}
@@ -232,6 +255,8 @@ function getEnd(){
     retArr[1] = endMarker[0].getPosition().lng()
     return retArr
 }
+
+function get
 
 /**
  * This function returns an array of size 3 holding the following vars in the
