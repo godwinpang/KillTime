@@ -15,7 +15,6 @@ var centerPt
  */
 
 function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
-    setDirectionsService()
     var start = new google.maps.LatLng(startLng, startLat)
     var end = new google.maps.LatLng(destLng, destLat)
     var service = new google.maps.DistanceMatrixService();
@@ -30,7 +29,6 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
         if (status == 'OK'){
             var duration = response.rows[0].elements[0].duration.value
             console.log("duration: " + duration)
-
         }
     }
 }
@@ -217,6 +215,20 @@ function initMap(){
     });
 }
 
+function getStart(){
+    var retArr = new Array(2)
+    retArr[0] = startMarker[0].getPosition().lat()
+    retArr[1] = startMarker[0].getPosition().lng()
+    return retArr
+}
+
+function getEnd(){
+    var retArr = new Array(2)
+    retArr[0] = endMarker[0].getPosition().lat()
+    retArr[1] = endMarker[0].getPosition().lng()
+    return retArr
+}
+
 /**
  * This function returns an array of size 3 holding the following vars in the
  * specified order:
@@ -230,11 +242,19 @@ function getCenterRadius(){
     var retArr = new Array(3)
     retArr[0] = centerPt.lat()
     retArr[1] = centerPt.lng()
-    var latLeg = startMarker[0].getPosition().lat() - endMarker[0].getPosition().lat()
-    var lngLeg = startMarker[0].getPosition().lng() - endMarker[0].getPosition().lng()
-    var latLegSq = Math.pow(latLeg, 2)
-    var lngLegSq = Math.pow(lngLeg, 2)
-    var radius = Math.pow(latLegSq+lngLegSq, 0.5)
+
+    var R = 6371e3; // metres
+    var φ1 = startMarker[0].getPosition().lat().toRadians();
+    var φ2 = endMarker[0].getPosition().lat().toRadians();
+    var Δφ = (startMarker[0].getPosition().lat()-endMarker[0].getPosition().lat()).toRadians();
+    var Δλ = (startMarker[0].getPosition().lng() - endMarker[0].getPosition().lng()).toRadians();
+
+    var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    var radius = R * c
     if (radius < 50){
         radius = 50
     }

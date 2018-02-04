@@ -144,9 +144,6 @@ async function updateSearchResults() {
     getBusinessDetails();
 
   }
-
-
-
 }
 
 // Updates the business details (call after updateSearchResults has been called)
