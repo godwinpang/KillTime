@@ -16,7 +16,7 @@ const DEFAULT_DURATION = 30; // default duration spent at each place (in minutes
 const DEFAULT_WEIGHT = 2; // default weighting the user gives the node.
 
 // Global variables (with default values)
-var keywords = ['food', 'salon'];
+var keywords = ['restaurants', 'food'];
 var latitude = 33.6490126; //updated by Google Maps API
 var longitude = -117.8427879;
 var radius = 40; // in meters
@@ -87,10 +87,10 @@ function retrieveParams() {
       keywords = keywordsArea.value.split("\n");
     }
 
-    var locArr = getCenterRadius
+    var locArr = getCenterRadius();
     latitude = locArr[0]
     longitude = locArr[1]
-    radius = locArr[2]
+    radius = 1000;
 
     // Create Date objects from field data.
     var sT = new Date(startTimeElem.value);
@@ -119,6 +119,8 @@ async function updateSearchResults() {
   if(paramsValid) {
     var promises = [];
     for(var i = 0; i < keywords.length; i++) {
+      console.log(keywords[i]);
+      console.log(radius);
       promises = promises.concat([$.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
         type: "GET",
         data: {
