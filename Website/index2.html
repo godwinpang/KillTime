@@ -6,10 +6,14 @@
         <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
         <meta name = "viewport" content="width=device-width, initial-scale=1">
         <!-- Page title -->
-        <title> KillTime | Welcome </title>
+        <title> Explore | Welcome </title>
         <link rel = "stylesheet" href="./css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type="text/javascript" src="script.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+
+
+
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&callback=initMap"
         async defer></script>
     </head>
@@ -19,7 +23,7 @@
       <header>
         <div class = "container">
           <div id = "topBar">
-          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Kill Time </span></h1> Find things to do while you wait!
+          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Explore </span></h1> Find things to do while you wait!
 
           <nav>
             <ul>
@@ -37,18 +41,20 @@
 
 
       <!--The user input!-->
-    <section id = "userInput">
+    <form id = "userInput">
         <div class = "container">
-            <input onClick="this.select();" id="startLocation" type="text" value="Starting location:" readonly>
-            <input id="startTime" type="datetime-local">
+            <input onClick="this.select();" id="startLocation" type="text" readonly required>
+            <input id="startTime" type="datetime-local" required>
           </br>
-            <input onClick="this.select();" id="endLocation" type="text" value="Ending location:" readonly>
-            <input id="endTime" type="datetime-local">
+            <input onClick="this.select();" id="endLocation" type="text" value="Ending location" readonly required>
+            <input id="endTime" type="datetime-local" required>
+            <input  id="submitButton" type="submit" onClick="retrieveParams();" value="Explore">
         </div>
-    </section>
 
-    <!--THIS IS THE PLACE TO INSERT THE MAP!-->
-    <div id = "map"></div>
+    </form>
+
+    <!--THIS IS THE PLACE TO INSERT THE MAP
+    <div id = "map"></div>!-->
 
     <span class = "container">
       <select id="mySelect" name="places" size="4" multiple>
@@ -97,6 +103,7 @@
       <footer>
         <p></p>
       </footer>
+      <script type="text/javascript" src="index.js"></script>
     </body>
 
 </html>

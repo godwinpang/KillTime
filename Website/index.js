@@ -25,36 +25,59 @@ var startLocation = document.getElementById("startLocation");
 var startTime = document.getElementById("startTime");
 var endLocation = document.getElementById("endLocation");
 var endTime = document.getElementById("endTime");
+var submitButton = document.getElementById("submitButton");
 
 
+var paramsValid = false;
+
+const START_LOCATION_PLACEHOLDER = "Starting Location";
+const END_LOCATION_PLACEHOLDER = "End Location";
+
+
+
+function initializeFields() {
+  startLocation.value = START_LOCATION_PLACEHOLDER;
+  endLocation.value = END_LOCATION_PLACEHOLDER;
+}
 
 // Updates the global variables with the data inputted by the user
 function retrieveParams() {
+  alert("function called1");
+
+    if(startLocation.value == START_LOCATION_PLACEHOLDER) {
+
+  }
+
+  if(endLocation.value == END_LOCATION_PLACEHOLDER) {
+
+  }
 
 }
 
 // Updates the searchResults data object with data from Yelp API
 function updateSearchResults(callback) {
-  $.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
-    type: "GET",
-    data: {
-      term: keyword,
-      latitude: latitude,
-      longitude: longitude,
-      radius: radius
-    },
-    contentType: "application/x-www-form-urlencoded",
-    dataType: "json",
-    headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
-    success: function(data) {
-      console.log(data);
-      searchResults = JSON.parse(JSON.stringify( data ));
-      callback();
-    },
-    error: function() {
-      console.log("get call error");
-    }
-  })
+  if(paramsValid) {
+    $.ajax(PROXY_URL + API_HOST + SEARCH_PATH, {
+      type: "GET",
+      data: {
+        term: keyword,
+        latitude: latitude,
+        longitude: longitude,
+        radius: radius
+      },
+      contentType: "application/x-www-form-urlencoded",
+      dataType: "json",
+      headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
+      success: function(data) {
+        console.log(data);
+        searchResults = JSON.parse(JSON.stringify( data ));
+        callback();
+      },
+      error: function() {
+        console.log("get call error");
+      }
+    })
+  }
 
 }
 
@@ -79,3 +102,8 @@ function getBusinessDetails() {
     })
   }
 }
+
+// Main
+$(function () {
+  initializeFields();
+});
