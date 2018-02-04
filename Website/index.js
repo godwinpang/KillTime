@@ -131,7 +131,7 @@ function retrieveParams() {
 async function updateSearchResults() {
 
   if(paramsValid) {
-    loadingField.value="Loading";
+    loadingField.innerHTML="Loading";
     var promises = [];
     var checked = 0;
     for(var i = 0; i < keywords.length; i++) {
@@ -258,7 +258,7 @@ async function createEdges() {
     console.log(latAndLongArray);
 
     getMapFromPlaces(latAndLongArray);
-    loadingField.value="";
+    loadingField.innerHTML="";
   }
 
   console.log("exiting createEdges");
