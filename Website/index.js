@@ -19,6 +19,8 @@ var keywords = ['food'];
 var latitude = 33.6490126;
 var longitude = -117.8427879;
 var radius = 40; // in meters
+var startTime;
+var endTime;
 
 
 var searchResults;
@@ -27,9 +29,9 @@ var businessDetails;
 // Form elements
 var mySelect = document.getElementById("mySelect");
 var startLocation = document.getElementById("startLocation");
-var startTime = document.getElementById("startTime");
+var startTimeElem = document.getElementById("startTime");
 var endLocation = document.getElementById("endLocation");
-var endTime = document.getElementById("endTime");
+var endTimeElem = document.getElementById("endTime");
 var submitButton = document.getElementById("submitButton");
 var keywordsArea = document.getElementById("keywords");
 
@@ -42,14 +44,20 @@ var paramsValid = false;
 function retrieveParams() {
   paramsValid = false;
   if(startLocation.value != "" && endLocation.value != ""
-    && startTime.value != "" && endTime.value != "") {
+    && startTimeElem.value != "" && endTimeElem.value != "") {
     paramsValid = true;
     keywords = keywordsArea.value.split("\n");
-
 
     alert("valide!!");
   } else {
     alert("invalid coordinates + time inputs");
+    alert(startTimeElem.value);
+    alert(endTimeElem.value)
+    startTime = new Date(startTimeElem.value);
+    endTime = new Date(endTimeElem.value);
+    alert(startTime.getDay());
+    alert(startTime.getTime());
+
   }
 
 }

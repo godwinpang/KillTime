@@ -37,13 +37,17 @@ ul{
 /* Header Comment*/
 header{
   background: #b3b9b7;
-  color: #ffffff;
+  color: gold;
   padding-top: 20px;
   min-height: 50px;
   border-bottom: #e8c00e 3px solid;
+  background-image: url("../img/hiking.jpg");
+  font-family: fantasy;
+  font-weight: bold;
+
 }
 
-header a{
+header a {
   color: #ffffff;
   text-decoration: none;
   text-transform: uppercase;

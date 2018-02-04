@@ -27,9 +27,9 @@
 
           <nav>
             <ul>
-              <li class = "current"><a href = "index.html">Home</a></li>
-              <li class = "current"><a href = "about.html">About</a></li>
-              <li><div style="font-size:4em; color:Tomato">
+              <li>
+                <input onClick="this.focus()" id="shareText" type="url" placeholder="Share URL" size="30" readonly>
+
                 <a class="loginButton" href="OUR LOGIN PAGE">
                   <i class="fa fa-user fa-2x" aria-hidden="true"></i>
               </div></a></li>
@@ -43,13 +43,13 @@
       <!--The user input!-->
     <form id = "userInput">
         <div class = "container">
-            <input id="startLocation" type="text" placeholder="Where from?">
+            <input id="startLocation" type="text" placeholder="Where from?" size="30">
             <input id="startTime" type="datetime-local">
             <span class="floatRight">Interests: <textarea id="keywords" rows="3" cols="35" placeholder="Enter each of your interests on new line.
 Ex. Chinese Food"></textarea></span>
 
           </br>
-            <input id="endLocation" type="text" placeholder="Where to?">
+            <input id="endLocation" type="text" placeholder="Where to?" size="30">
             <input id="endTime" type="datetime-local">
             <input id="submitButton" type="button" onClick="retrieveParams();" value="Explore">
             <input id="button1" type="button" value="a">
