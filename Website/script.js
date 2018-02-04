@@ -1,4 +1,7 @@
-var places = [[33.649833, -117.838715], [33.655549, -117.837170], [33.649833, -117.830647], [33.650119, -117.836827]]
+var places // var to store path from kev
+var map
+var startMarker
+var endMarker
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -21,20 +24,10 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
             origins: [start],
             destinations: [end],
             travelMode : google.maps.TravelMode["WALKING"]
-
         }, callback);
-    //TODO CLEAN UP THIS MESS
     function callback(response, status){
         if (status == 'OK'){
-            var origins = response.originAddresses
-            var destinations = response.destinationAddresses
-
-            var result = response.rows[0].elements
-            var element = result[0]
-            var duration = element.duration.value
-            var distance = element.distance.text
-            var from = origins[0]
-            var to = destinations[0]
+            var duration = response.rows[0].elements[0].duration.value
             console.log("duration: " + duration)
 
         }
@@ -89,10 +82,176 @@ function getMapFromPlaces(directionsService, directionsDisplay, places){
 function initMap(){
     var directionsDisplay = new google.maps.DirectionsRenderer
     var directionsService = new google.maps.DirectionsService
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
         center: {lat: 33.653334, lng: -117.839316}
     })
     directionsDisplay.setMap(map)
-    getMapFromPlaces(directionsService, directionsDisplay, places)
+    //getMapFromPlaces(directionsService, directionsDisplay, places)
+
+    // Create the search box and link it to the UI element.
+    var inputStart = document.getElementById('startLocation')
+    var startSearchBox = new google.maps.places.SearchBox(inputStart)
+    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputStart)
+
+    var inputEnd = document.getElementById('endLocation')
+    var endSearchBox = new google.maps.places.SearchBox(inputEnd)
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+      startSearchBox.setBounds(map.getBounds())
+      endSearchBox.setBounds(map.getBounds())
+    });
+    startMarker = []
+    endMarker = []
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    startSearchBox.addListener('places_changed', function() {
+      var startPlaces = startSearchBox.getPlaces();
+
+      if (startPlaces.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      startMarker.forEach(function(startMarker) {
+        startMarker.setMap(null);
+      });
+      startMarker = [];
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      startPlaces.forEach(function(startPlace) {
+        if (!startPlace.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: startPlace.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        startMarker.push(new google.maps.Marker({
+          map: map,
+          title: startPlace.name,
+          position: startPlace.geometry.location
+        }));
+        map.setCenter(startMarker[0].getPosition())
+
+        if (startPlace.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(startPlace.geometry.viewport);
+        } else {
+          bounds.extend(startPlace.geometry.location);
+        }
+      });
+
+      map.fitBounds(bounds);
+    });
+
+    endSearchBox.addListener('places_changed', function() {
+      var endPlaces = endSearchBox.getPlaces();
+
+      if (endPlaces.length == 0) {
+        return;
+      }
+
+      // Clear out the old markers.
+      endMarker.forEach(function(endMarker) {
+        endMarker.setMap(null);
+      });
+      endMarker = [];
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      endPlaces.forEach(function(endPlace) {
+        if (!endPlace.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: endPlace.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        if (startMarker[0] != null){
+            //console.log(typeof endPlace.geometry.location)
+            //console.log(startMarker[0].constructor === google.maps.Marker)
+            //console.log(centerPt.constructor === google.maps.LatLng)
+            console.log("startMarker[0].getPosition().lat(): "+startMarker[0].getPosition().lat());
+            console.log("startMarker[0].getPosition().lng(): "+startMarker[0].getPosition().lng());
+            console.log("endPlace.geometry.location.lat(): "+endPlace.geometry.location.lat());
+            console.log("endPlace.geometry.location.lng(): "+endPlace.geometry.location.lng());
+            var centerPt = (getMidPoint(startMarker[0].getPosition(), endPlace.geometry.location))
+            console.log("centerPt.lat(): " + centerPt.lat())
+            console.log("centerPt.lng(): " + centerPt.lng())
+            map.setCenter(centerPt)
+            //alert("centerSet")
+        }
+        // Create a marker for each place.
+        endMarker.push(new google.maps.Marker({
+          map: map,
+          title: endPlace.name,
+          position: endPlace.geometry.location
+        }));
+        /*
+        if (startMarker.length != 0){
+            map.setCenter(getMidPoint(startMarker[0].getPosition(), endMarker[0].getPosition()))
+        }
+        */
+
+        if (endPlace.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(endPlace.geometry.viewport);
+        } else {
+          bounds.extend(endPlace.geometry.location);
+        }
+      });
+
+      map.fitBounds(bounds);
+    });
+}
+
+/**
+ * This function removes all markers from the map and renders it view-only.
+ */
+
+function changeMapMode(){
+    clearMarkers()
+    map.setOptions('disableDefaultUI', false)
+}
+
+// Adds a marker to the map and push to the array.
+function addMarker(location) {
+    var marker = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    markers.push(marker);
+}
+
+function clearMarkers() {
+    for (i = 0 ; i < startMarker.length ; i++){
+        startMarker[i].setMap(null)
+    }
+    for (j = 0 ; j < endMarker.length ; j++){
+        endMarker[j].setMap(null)
+    }
+    startMarker = []
+    endMarker = []
+}
+
+function getMidPoint(loc1, loc2){
+    var midLat = (1000000 * loc1.lat() + 1000000 * loc2.lat()) * 0.5 / 1000000
+    var midLng = (1000000 * loc1.lng() + 1000000 * loc2.lng()) * 0.5 / 1000000
+    var midPt = new google.maps.LatLng(midLat, midLng)
+    return midPt
 }
