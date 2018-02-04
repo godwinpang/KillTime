@@ -63,6 +63,7 @@ function getBusinessDetails() {
       headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
       success: function(data2) {
         businessDetails = businessDetails.concat(data2);
+        console.log(data2.rating);
       },
       error: function() {
         console.log("get call error");

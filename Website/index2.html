@@ -11,10 +11,12 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type="text/javascript" src="script.js"></script>
         <script src="jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="Graph.js"></script>
 
 
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&callback=initMap"
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&libraries=places&callback=initMap"
         async defer></script>
     </head>
 
@@ -53,7 +55,7 @@ Ex. Chinese Food"></textarea></span>
           </br>
             <input id="endLocation" type="text" placeholder="Where to?" size="30">
             <input id="endTime" type="datetime-local">
-            <input id="submitButton" type="button" onClick="retrieveParams();" value="QTime!">
+            <input id="submitButton" type="button" value="QTime!">
             <input id="button1" type="button" value="a">
             <input id="button2" type="button" value="a">
             <input id="button33" type="button" value="a">
