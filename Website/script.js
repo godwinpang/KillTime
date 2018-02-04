@@ -1,15 +1,4 @@
-var directionDisplay
-var directionsService
-var map
-
-
-/**
- * PLEASE JUST CALL THIS FUNCTION UPON PAGE LOAD THANKS
- */
-
-function setDirectionsService(){
-    directionService = new google.maps.DirectionsService()
-}
+var places = [[33.649833, -117.838715], [33.655549, -117.837170], [33.649833, -117.830647], [33.650119, -117.836827]]
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -31,10 +20,10 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
         {
             origins: [start],
             destinations: [end],
-            travelMode : 'WALKING'
+            travelMode : google.maps.TravelMode["WALKING"]
 
         }, callback);
-
+    //TODO CLEAN UP THIS MESS
     function callback(response, status){
         if (status == 'OK'){
             var origins = response.originAddresses
@@ -58,9 +47,7 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
  * order of places to be visited.
  */
 
-function getMapFromPlaces(places){
-    //arrayParsing
-
+function getMapFromPlaces(directionsService, directionsDisplay, places){
     var stops = new Array(places.length-2)
     for (i = 0 ; i < stops.length ; i++){
         stops[i] = new Array(2)
@@ -72,7 +59,7 @@ function getMapFromPlaces(places){
     }
 
     var stopPts = new Array(stops.length)
-    for (i = 0 ; i < stopPt.length ; i++){
+    for (i = 0 ; i < stopPts.length ; i++){
         var temp = new google.maps.LatLng(stops[i][0], stops[i][1])
         stopPts[i] = {location: temp}
     }
@@ -82,12 +69,14 @@ function getMapFromPlaces(places){
     var request = {
         origin: startPt,
         destination: endPt,
-        travelMode: 'WALKING',
+        travelMode: google.maps.TravelMode['WALKING'],
         waypoints: stopPts
     }
     directionsService.route(request, function(response, status){
         if (status == 'OK'){
             directionsDisplay.setDirections(response)
+        } else {
+            window.alert('i messed up because ' + status)
         }
     })
 }
@@ -97,14 +86,13 @@ function getMapFromPlaces(places){
  * the map should be centered around. It then initializes a map for the map.
  */
 
-function initializeMap(lngLatArr){
-    directionDisplay = new google.maps.DirectionsRenderer()
-    var centerPt = new google.maps.LatLng(lngLatArr[0], lngLatArr[1])
-    var mapOptions = {
-        center: {lat: lngLatArr[0], lng: lngLatArr[1]},
-        zoom: 7
-    }
-    map = new google.maps.Map(document.getElementById('map'), mapOptions) // set div name to map
-    directionDisplay.setMap(map)
-    directionsDisplay.setPanel(document.getElementById('directionsPanel'))
+function initMap(){
+    var directionsDisplay = new google.maps.DirectionsRenderer
+    var directionsService = new google.maps.DirectionsService
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 7,
+        center: {lat: 33.653334, lng: -117.839316}
+    })
+    directionsDisplay.setMap(map)
+    getMapFromPlaces(directionsService, directionsDisplay, places)
 }

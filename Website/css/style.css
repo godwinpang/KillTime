@@ -6,6 +6,12 @@
 @import 'owl.theme.css';
 @import 'magnific-popup.css';
 
+#map {
+    position: static !important;
+    height: 50%;
+    width: 50%;
+}
+
 body {
    font: 15px/1.5 Arial, Helvetica, sans-serif;
    padding: 0;
