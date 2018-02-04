@@ -7,7 +7,7 @@ const BUSINESS_PATH = "/v3/businesses/";
 const TOKEN_PATH = "/oauth2/token";
 const GRANT_TYPE = "client_credentials";
 
-const NODE_THRESHOLD = 31; // 31 nodes max for graph alg.
+const NODE_THRESHOLD = 20; // 31 nodes max for graph alg.
 
 
 const ACCESS_TOKEN = "g9p9BLtkh5mMy0q5hq4OES-H7hbCWetuC-AH0lWKvkcp4diO2unHx_HoxkgAg5Nl7LcJplMUJk_UGoEK9t6hVFodDefdHqcHc21qcA6qdaph4ZzBQjp5Awzla4B1WnYx";
@@ -24,8 +24,11 @@ var startTime; // military time HHMM of the start time
 var endTime; // military time HHMM of the end time ASSUMES THAT START AND END DATES ARE THE SAME
 var dayOfTheWeek; // day of the week of startTime (0 is Monday; 6 is Sunday)
 
-var searchResults;
-var businessDetails;
+var startLatitude;
+var startLongitude; 
+
+var searchResults = [];
+var businessDetails = [];
 var locationNames = []; // String Array of locations inserted into the Graph
 var locationIDs = []; // String Array of locations inserted into the Graph
 
@@ -87,10 +90,7 @@ function retrieveParams() {
       keywords = keywordsArea.value.split("\n");
     }
 
-    var locArr = getCenterRadius();
-    latitude = locArr[0]
-    longitude = locArr[1]
-    radius = 1000;
+
 
     // Create Date objects from field data.
     var sT = new Date(startTimeElem.value);
@@ -102,6 +102,11 @@ function retrieveParams() {
     // Calculate time of day
     startTime = sT.getHours() * 100 + sT.getMinutes();
     endTime = eT.getHours() * 100 + eT.getMinutes();
+
+    var locArr = getCenterRadius();
+    latitude = locArr[0]
+    longitude = locArr[1]
+    radius = 350 + (endTime - startTime);
 
     updateSearchResults();
   } else {
@@ -159,12 +164,14 @@ async function getBusinessDetails() {
   locationNames = []; // reset locations array
   locationIDs = [];
 
+  Graph = [[],[]];
   // RESET GRAPH??
 
   var promises = [];
   var checked = 0;
   for(var i = 0; i < searchResults.businesses.length; i++) {
     // filter bad results
+
     if(checked < NODE_THRESHOLD) {
        promises = promises.concat([$.ajax(PROXY_URL + API_HOST + BUSINESS_PATH + searchResults.businesses[i].id, {
         type: "GET",
@@ -172,17 +179,19 @@ async function getBusinessDetails() {
         dataType: "json",
         headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
         success: function(data2) {
-          if(data2.hours.length >= 1 && data2.hours[0].open.length > dayOfTheWeek &&
-            parseInt(data2.hours[0].open[dayOfTheWeek].start) <
-            startTime && parseInt(data2.hours[0].open[dayOfTheWeek].end) > endTime) {
+          console.log("length: " + locationIDs.length);
 
-              // uses yelp business id as Graph key. ///////// MIGHT NEED TO PASS IN MORE INFO. WAIT HOW DO WE PASS IN THE longitude and latitude??
-              addNode(data2.id, parseInt(data2.hours[0].open[dayOfTheWeek].start),
+          if(data2.hours.length >= 1 && data2.hours[0].open.length > dayOfTheWeek &&
+            parseInt(data2.hours[0].open[dayOfTheWeek].start) <= endTime &&
+            parseInt(data2.hours[0].open[dayOfTheWeek].end) >= startTime) {
+
+              // uses lat,long
+              addNode(data2.coordinates.latitude + "," + data2.coordinates.longitude, parseInt(data2.hours[0].open[dayOfTheWeek].start),
               parseInt(data2.hours[0].open[dayOfTheWeek].end), DEFAULT_DURATION, data2.rating);
 
               // add name to locations
-              locationNames.concat([data2.name]);
-              locationIDs.concat([data2.id]);
+              locationNames = locationNames.concat([data2.name]);
+              locationIDs = locationIDs.concat([data2.id]);
 
               // add to businessDetails array
               businessDetails = businessDetails.concat(data2);
@@ -213,8 +222,12 @@ function createEdges() {
     }
   }
   console.log("done creating edges");
-
+  if(checkComplete()) {
+    longPath(latitude, longitude, startTime, endTime);
+  }
 
 }
+
+
 
 // then call longPath, start dest, start time, end time
