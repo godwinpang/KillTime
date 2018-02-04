@@ -43,14 +43,17 @@ var paramsValid = false;
 // Updates the global variables with the data inputted by the user
 function retrieveParams() {
   paramsValid = false;
-  if(startLocation.value != "" && endLocation.value != ""
+  if(endTimeElem.value <= Date.now()) {
+    alert("Invalid date! End date must be bigger than current date.")
+  } else if (endTimeElem.value <= startTimeElem.value) {
+    alert("Invalid date! End date must be bigger than start date.")
+  } else if(startLocation.value != "" && endLocation.value != ""
     && startTimeElem.value != "" && endTimeElem.value != "") {
     paramsValid = true;
     keywords = keywordsArea.value.split("\n");
-
-    alert("valide!!");
+    alert("Valid!!");
   } else {
-    alert("invalid coordinates + time inputs");
+    alert("Invalid coordinates + time inputs");
     alert(startTimeElem.value);
     alert(endTimeElem.value)
     startTime = new Date(startTimeElem.value);
