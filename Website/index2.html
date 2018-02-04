@@ -43,11 +43,11 @@
       <!--The user input!-->
     <form id = "userInput">
         <div class = "container">
-            <input onClick="this.select();" id="startLocation" type="text" readonly required>
-            <input id="startTime" type="datetime-local" required>
+            <input onClick="this.select();" id="startLocation" type="text" readonly>
+            <input id="startTime" type="datetime-local">
           </br>
-            <input onClick="this.select();" id="endLocation" type="text" value="Ending location" readonly required>
-            <input id="endTime" type="datetime-local" required>
+            <input onClick="this.select();" id="endLocation" type="text" value="Ending location" readonly>
+            <input id="endTime" type="datetime-local">
             <input  id="submitButton" type="submit" onClick="retrieveParams();" value="Explore">
         </div>
 
@@ -55,14 +55,20 @@
 
     <!--THIS IS THE PLACE TO INSERT THE MAP
     <div id = "map"></div>!-->
+    <img src = "./img/food.jpg" align="middle">
 
-    <span class = "container">
+    <span class = "container" height = "500px">
+
+      Keywords:</br>
+      <input id="keywordInput" type="text">
+      <input id="keywordButton" type="button" value="+">
       <select id="mySelect" name="places" size="4" multiple>
         <option value="Food">Food</option>
         <option value="Beauty">Beauty</option>
         <option value="Parks">Parks</option>
         <option value="Store">Store</option>
       </select>
+      <div id="keywords"></div>
     </span>
 
 
