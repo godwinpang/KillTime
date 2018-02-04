@@ -19,7 +19,7 @@ var keywords = ['food'];
 var latitude = 33.6490126;
 var longitude = -117.8427879;
 var radius = 40; // in meters
-var startTime;
+var startTime; // 0 is sunday; 6 is saturday. Hours is in military hours
 var endTime;
 
 
@@ -35,10 +35,7 @@ var endTimeElem = document.getElementById("endTime");
 var submitButton = document.getElementById("submitButton");
 var keywordsArea = document.getElementById("keywords");
 
-
 var paramsValid = false;
-
-
 
 // Updates the global variables with the data inputted by the user
 function retrieveParams() {
@@ -51,12 +48,9 @@ function retrieveParams() {
     alert("valide!!");
   } else {
     alert("invalid coordinates + time inputs");
-    alert(startTimeElem.value);
-    alert(endTimeElem.value)
     startTime = new Date(startTimeElem.value);
     endTime = new Date(endTimeElem.value);
-    alert(startTime.getDay());
-    alert(startTime.getTime());
+    alert("day: " + startTime.getDay() + " hours: " + startTime.getHours() + "mins: " + startTime.getMinutes());
 
   }
 
