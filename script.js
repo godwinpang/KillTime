@@ -36,7 +36,7 @@ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
 
         }
     }
-}
+};
 /*
 function testFunc(startLng, startLat, destLng, destLat){
     console.log(getTimeBetweenTwo(startLng, startLat, destLng, destLat))
