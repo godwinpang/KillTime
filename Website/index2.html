@@ -43,13 +43,13 @@
       <!--The user input!-->
     <form id = "userInput">
         <div class = "container">
-            <input onClick="this.select();" id="startLocation" type="text" readonly>
+            <input id="startLocation" type="text" placeholder="Where from?">
             <input id="startTime" type="datetime-local">
-            <span class="floatRight">Interests: <textarea id="keywords" rows="3" cols="35" placeholder="Enter your interests on new line.
+            <span class="floatRight">Interests: <textarea id="keywords" rows="3" cols="35" placeholder="Enter each of your interests on new line.
 Ex. Chinese Food"></textarea></span>
 
           </br>
-            <input onClick="this.select();" id="endLocation" type="text" value="Ending location" readonly>
+            <input id="endLocation" type="text" placeholder="Where to?">
             <input id="endTime" type="datetime-local">
             <input id="submitButton" type="button" onClick="retrieveParams();" value="Explore">
             <input id="button1" type="button" value="a">
