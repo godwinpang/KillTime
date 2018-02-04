@@ -6,8 +6,10 @@ var maxWeight = 0;
 // Add a node to the graph
 function addNode(name, open, close, duration, rating) {
     // Push the node onto the node array
+    opened = parseTime(open);
+    closedd = parseTime(close);
     // 0 - name, 1 - open time, 2 - close time, 3 - avg stay, 4 - rating, 5 - visited status, 6 - stored dist
-    this.Graph[0].push([name, parseTime(open), parseTime(close), duration, rating, false, 0]);
+    this.Graph[0].push([name, opened, closedd, duration, rating, false, 0]);
 
     // Push the row for the new node onto the adjeacency matrix
     this.Graph[1].push([name]);
@@ -84,16 +86,19 @@ function dumbPath(name1, name2) {
 }
 
 function parseTime(time) {
-    hour = time / 100;
+    hour = Math.trunc(time / 100);
     minute = time % 100;
+    //console.log(hour + " " + minute);
     return 60 * hour + minute;
 }
 
 // Assume times are already parsed
 function isOpen(open, close, t, duration) {
+    //console.log(open + " " + close + " " + t + " " + ((t + duration) % 1440 <= close));
     if (open === close) return true;
-    return (close < open) ? (t >= open && (t + duration) <= closed) :
-        ((t >= open || t <= closed) && ((t + duration) >= open || (t + duration) <= closed));
+    if (open < close) return (t >= open) && (t + duration <= close);
+    if (t >= open) return (t + duration) % 1440 >= open || (t + duration) % 1440 <= close;
+    return (t + duration) % 1440 <= close;
 }
 
 function copyArrWithout(a, val) {
@@ -111,14 +116,15 @@ function longPath(name1, name2, t0, tn) {
     startTime = parseTime(t0);
     endTime = parseTime(tn);
 
-    var options = branch(name1, name2, t0, tn, this.Graph[0], 0)
+    var options = branch(name1, name2, startTime, endTime, this.Graph[0], 0)
     console.log(options);
 
     options.sort(function (a, b) { return b[0] - a[0] });
 
     path = [];
+    if (options.length === 0) return [];
     for (i = 1; i < options[0].length; i++) {
-        path.push(options[0][i]);
+        path.unshift(options[0][i]);
         //console.log(options[0][i]);
     }
     return path;
@@ -128,7 +134,7 @@ function branch(name1, name2, t0, tn, list, score) {
     //console.log(name1 + ":" + name2 + ":" + t0 + ":" + tn + ":" + list + ":" + score)
     // base case where the destination is reached
     if (name1 === name2) {
-        return [[score, name1]];
+        return [[score + getNode(name1)[4], name1]];
     }
 
     // Calculate the values for the next iterations
