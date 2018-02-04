@@ -2,6 +2,7 @@ var places // var to store path from kev
 var map
 var startMarker
 var endMarker
+var centerPt
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -183,18 +184,14 @@ function initMap(){
         };
 
         if (startMarker[0] != null){
-            //console.log(typeof endPlace.geometry.location)
-            //console.log(startMarker[0].constructor === google.maps.Marker)
-            //console.log(centerPt.constructor === google.maps.LatLng)
             console.log("startMarker[0].getPosition().lat(): "+startMarker[0].getPosition().lat());
             console.log("startMarker[0].getPosition().lng(): "+startMarker[0].getPosition().lng());
             console.log("endPlace.geometry.location.lat(): "+endPlace.geometry.location.lat());
             console.log("endPlace.geometry.location.lng(): "+endPlace.geometry.location.lng());
-            var centerPt = (getMidPoint(startMarker[0].getPosition(), endPlace.geometry.location))
+            centerPt = (getMidPoint(startMarker[0].getPosition(), endPlace.geometry.location))
             console.log("centerPt.lat(): " + centerPt.lat())
             console.log("centerPt.lng(): " + centerPt.lng())
             map.setCenter(centerPt)
-            //alert("centerSet")
         }
         // Create a marker for each place.
         endMarker.push(new google.maps.Marker({
@@ -218,6 +215,31 @@ function initMap(){
 
       map.fitBounds(bounds);
     });
+}
+
+/**
+ * This function returns an array of size 3 holding the following vars in the
+ * specified order:
+ *
+ * centerPtLat
+ * centerPtLng
+ * radius
+ */
+
+function getCenterRadius(){
+    var retArr = new Array(3)
+    retArr[0] = centerPt.lat()
+    retArr[1] = centerPt.lng()
+    var latLeg = startMarker[0].getPosition().lat() - endMarker[0].getPosition().lat()
+    var lngLeg = startMarker[0].getPosition().lng() - endMarker[0].getPosition().lng()
+    var latLegSq = Math.pow(latLeg, 2)
+    var lngLegSq = Math.pow(lngLeg, 2)
+    var radius = Math.pow(latLegSq+lngLegSq, 0.5)
+    if (radius < 50){
+        radius = 50
+    }
+    retArr[2] = radius
+    return retArr
 }
 
 /**

@@ -87,6 +87,11 @@ function retrieveParams() {
       keywords = keywordsArea.value.split("\n");
     }
 
+    var locArr = getCenterRadius
+    latitude = locArr[0]
+    longitude = locArr[1]
+    radius = locArr[2]
+
     // Create Date objects from field data.
     var sT = new Date(startTimeElem.value);
     var eT = new Date(endTimeElem.value);
