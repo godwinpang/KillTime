@@ -7,12 +7,15 @@
 @import 'magnific-popup.css';
 
 #map {
-    height: 70vh;
-    width: 70%;
+    height: 62vh;
+    width: 80%;
     margin-right: auto;
     margin-left: auto;
 }
 
+.floatRight {
+  float: right;
+}
 body {
    font: 15px/1.5 Arial, Helvetica, sans-serif;
    padding: 0;
