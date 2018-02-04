@@ -215,6 +215,10 @@ function initMap(){
     });
 }
 
+function radians(deg){
+  return deg * Math.PI / 180;
+}
+
 function getStart(){
     var retArr = new Array(2)
     retArr[0] = startMarker[0].getPosition().lat()
@@ -244,10 +248,10 @@ function getCenterRadius(){
     retArr[1] = centerPt.lng()
 
     var R = 6371e3; // metres
-    var φ1 = startMarker[0].getPosition().lat().toRadians();
-    var φ2 = endMarker[0].getPosition().lat().toRadians();
-    var Δφ = (startMarker[0].getPosition().lat()-endMarker[0].getPosition().lat()).toRadians();
-    var Δλ = (startMarker[0].getPosition().lng() - endMarker[0].getPosition().lng()).toRadians();
+    var φ1 = radians(startMarker[0].getPosition().lat());
+    var φ2 = radians(endMarker[0].getPosition().lat());
+    var Δφ = radians((startMarker[0].getPosition().lat()-endMarker[0].getPosition().lat()));
+    var Δλ = radians((startMarker[0].getPosition().lng() - endMarker[0].getPosition().lng()));
 
     var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
         Math.cos(φ1) * Math.cos(φ2) *

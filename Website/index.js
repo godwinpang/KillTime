@@ -25,7 +25,10 @@ var endTime; // military time HHMM of the end time ASSUMES THAT START AND END DA
 var dayOfTheWeek; // day of the week of startTime (0 is Monday; 6 is Sunday)
 
 var startLatitude;
-var startLongitude; 
+var startLongitude;
+
+var endLatitude;
+var endLongitude;
 
 var searchResults = [];
 var businessDetails = [];
@@ -48,6 +51,7 @@ submitButton.addEventListener("click", retrieveParams);
 
 var paramsValid = false;
 
+var ourLongPath;
 
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -74,7 +78,7 @@ window.onclick = function(event) {
 
 
 // Updates the global variables with the data inputted by the user
-// Calls updateSearchResults(getBusinessDetails)
+// Calls updateSearchResults()
 function retrieveParams() {
   paramsValid = false;
   if(new Date(endTimeElem.value).getTime() <= Date.now()) {
@@ -89,7 +93,6 @@ function retrieveParams() {
     if(keywordsArea.value != "") {
       keywords = keywordsArea.value.split("\n");
     }
-
 
 
     // Create Date objects from field data.
@@ -108,12 +111,17 @@ function retrieveParams() {
     longitude = locArr[1]
     radius = 350 + (endTime - startTime);
 
+    var locArr2 = getStart();
+    startLatitude = locArr2[0];
+    startLongitude = locArr2[1];
+
+    var locArr3 = getEnd();
+    endLatitude = locArr3[0];
+    endLongitude = locArr3[1];
+
     updateSearchResults();
   } else {
-    console.log("Invalid coordinates + time inputs");
-    console.log(startTimeElem.value);
-    console.log(endTimeElem.value)
-    console.log("day: " + startTime.getDay() + " hours: " + startTime.getHours() + "mins: " + startTime.getMinutes());
+    alert("Invalid coordinates + time inputs");
   }
 
 }
@@ -123,6 +131,7 @@ async function updateSearchResults() {
 
   if(paramsValid) {
     var promises = [];
+    var checked = 0;
     for(var i = 0; i < keywords.length; i++) {
       console.log(keywords[i]);
       console.log(radius);
@@ -138,6 +147,7 @@ async function updateSearchResults() {
         dataType: "json",
         headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
         success: function(data) {
+          checked++;
           console.log(data);
           console.log(keywords[i]);
           searchResults = JSON.parse(JSON.stringify( data ));
@@ -156,58 +166,62 @@ async function updateSearchResults() {
 
 // Updates the business details (call after updateSearchResults has been called)
 async function getBusinessDetails() {
-  console.log("in getBusinessDetails() ");
   businessDetails = []; // reset businessDetails array
   locationNames = []; // reset locations array
   locationIDs = [];
 
   Graph = [[],[]];
-  // RESET GRAPH??
 
   var promises = [];
-  var checked = 0;
-  for(var i = 0; i < searchResults.businesses.length; i++) {
-    // filter bad results
+  var numBusinesses = searchResults.businesses.length;
+  var batchSize = 3;
+  var hits = 0;
 
-    if(checked < NODE_THRESHOLD) {
-       promises = promises.concat([$.ajax(PROXY_URL + API_HOST + BUSINESS_PATH + searchResults.businesses[i].id, {
-        type: "GET",
-        contentType: "application/x-www-form-urlencoded",
-        dataType: "json",
-        headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
-        success: function(data2) {
-          console.log("length: " + locationIDs.length);
+  addNode(startLatitude + "," + startLongitude, 0, 0, 0, 0);
+  addNode(endLatitude + "," + endLongitude, 0, 0, 0, 0);
 
-          if(data2.hours.length >= 1 && data2.hours[0].open.length > dayOfTheWeek &&
-            parseInt(data2.hours[0].open[dayOfTheWeek].start) <= endTime &&
-            parseInt(data2.hours[0].open[dayOfTheWeek].end) >= startTime) {
+  locationIDs = locationIDs.concat([startLatitude + "," + startLongitude]);
+  locationIDs = locationIDs.concat([endLatitude + "," + endLongitude]);
+  for(var i = 0; i < numBusinesses; i++) {
+    if(hits <= batchSize) {
+      hits++;
+     promises = promises.concat([$.ajax(PROXY_URL + API_HOST + BUSINESS_PATH + searchResults.businesses[i].id, {
+      type: "GET",
+      contentType: "application/x-www-form-urlencoded",
+      dataType: "json",
+      headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
+      success: function(data2) {
 
-              // uses lat,long
-              addNode(data2.coordinates.latitude + "," + data2.coordinates.longitude, parseInt(data2.hours[0].open[dayOfTheWeek].start),
-              parseInt(data2.hours[0].open[dayOfTheWeek].end), DEFAULT_DURATION, data2.rating);
+        if(data2.hours.length >= 1 && data2.hours[0].open.length > dayOfTheWeek &&
+          parseInt(data2.hours[0].open[dayOfTheWeek].start) <= endTime &&
+          parseInt(data2.hours[0].open[dayOfTheWeek].end) >= startTime && locationIDs.length < NODE_THRESHOLD) {
 
-              // add name to locations
-              locationNames = locationNames.concat([data2.name]);
-              locationIDs = locationIDs.concat([data2.id]);
+            // uses lat,long
+            addNode(data2.coordinates.latitude + "," + data2.coordinates.longitude, parseInt(data2.hours[0].open[dayOfTheWeek].start),
+            parseInt(data2.hours[0].open[dayOfTheWeek].end), DEFAULT_DURATION, data2.rating);
 
-              // add to businessDetails array
-              businessDetails = businessDetails.concat(data2);
+            // add name to locations
+            locationNames = locationNames.concat([data2.name]);
+            locationIDs = locationIDs.concat([data2.coordinates.latitude + "," + data2.coordinates.longitude]);
 
-              console.log(data2.id);
+            // add to businessDetails array
+            businessDetails = businessDetails.concat(data2);
+          }
 
-              checked++;
-            }
-        },
-        error: function() {
-          console.log("get call error");
-        }
+      },
+      error: function() {
+        console.log("get call error");
+      }
       })]);
-
     } else {
-      break;
+      await Promise.all(promises);
+      hits = 0;
+      promises = [];
     }
   }
-  await Promise.all(promises);
+
+  console.log("done with promises");
+
   createEdges();
 }
 // after adding all the nodes, iterate with double for loop
@@ -219,9 +233,12 @@ function createEdges() {
     }
   }
   console.log("done creating edges");
+
   if(checkComplete()) {
-    longPath(latitude, longitude, startTime, endTime);
+    ourLongPath = longPath(startLatitude + "," + startLongitude, endLatitude + "," + endLongitude, startTime, endTime);
+    console.log("longPath executed");
   }
+  console.log("exiting createEdges");
 
 }
 
