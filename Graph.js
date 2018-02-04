@@ -106,19 +106,15 @@ function copyArrWithout(a, val) {
     return retArr;
 }
 
-function pathcmp(a, b) {
-    a[0] < b[0];
-}
-
 // Return a list contain the nodes in the shortes path from A to B
 function longPath(name1, name2, t0, tn) {
     startTime = parseTime(t0);
     endTime = parseTime(tn);
 
-    options = branch(name1, name2, t0, tn, this.Graph[0], 0)
+    var options = branch(name1, name2, t0, tn, this.Graph[0], 0)
     console.log(options);
 
-    options.sort(pathcmp);
+    options.sort(function (a, b) { return b[0] - a[0] });
 
     path = [];
     for (i = 1; i < options[0].length; i++) {
