@@ -116,29 +116,36 @@ function longPath(name1, name2, t0, tn) {
     endTime = parseTime(tn);
 
     options = branch(name1, name2, t0, tn, this.Graph[0], 0)
+    console.log(options);
+
     options.sort(pathcmp);
 
     path = [];
-    for (i = 1; i > options[0].length; i++) {
+    for (i = 1; i < options[0].length; i++) {
         path.push(options[0][i]);
+        //console.log(options[0][i]);
     }
     return path;
 }
 
 function branch(name1, name2, t0, tn, list, score) {
+    //console.log(name1 + ":" + name2 + ":" + t0 + ":" + tn + ":" + list + ":" + score)
     // base case where the destination is reached
-    if (name1 === name2) return [score, name1];
+    if (name1 === name2) {
+        return [[score, name1]];
+    }
 
     // Calculate the values for the next iterations
-    options = [];
-    newScore = score + getNode(name1)[4];
-    smaller = copyArrWithout(list, name1);
+    var options = [];
+    var newScore = score + getNode(name1)[4];
+    var smaller = copyArrWithout(list, name1);
 
+    // console.log(smaller)
     // Iterates over all the remaining nodes
-    for (i = 0; i < smaller.length; i++) {
-
+    for (var i = 0, size = smaller.length; i < size; i++) {
+        //console.log(i + " " + smaller);
         // Calculate the time to reach the node
-        elapsedTime = t0 + getEdge(name1, smaller[i][0]);
+        var elapsedTime = t0 + getEdge(name1, smaller[i][0]);
 
         // Check if the node is "open" when we visit it
         if (isOpen(smaller[i][1], smaller[i][2], elapsedTime, smaller[i][3])) {
@@ -150,15 +157,21 @@ function branch(name1, name2, t0, tn, list, score) {
             if (elapsedTime < tn) {
 
                 // Recurse on the node with a smaller node list
-                retVal = branch(smaller[i][0], name2, elapsedTime, tn, smaller, newScore);
-
+                var retVal = branch(smaller[i][0], name2, elapsedTime, tn, smaller, newScore);
+                //console.log(retVal);
                 // Check if there was a return value
-                if (retVal && retVal.length > 1) {
+                if (retVal.length > 0) {
                     // Build the path
-                    retVal.push(name1);
-                    options.push(retVal);
+                    for (var j = 0, branches = retVal.length; j < branches; j++) {
+                        retVal[j].push(name1);
+                        options.push(retVal[j]);
+                    }
                 }
             }
         }
-    }
+
+        //console.log(i + " " + smaller.length);
+    } 
+
+    return options;
 }
