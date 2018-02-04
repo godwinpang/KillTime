@@ -42,14 +42,16 @@ function initializeFields() {
 
 // Updates the global variables with the data inputted by the user
 function retrieveParams() {
-  alert("function called1");
+  paramsValid = false;
+  if(startLocation.value != START_LOCATION_PLACEHOLDER
+    && endLocation.value != END_LOCATION_PLACEHOLDER && startTime.value != ""
+    && endTime.value != "") {
+    paramsValid = true;
 
-    if(startLocation.value == START_LOCATION_PLACEHOLDER) {
-
-  }
-
-  if(endLocation.value == END_LOCATION_PLACEHOLDER) {
-
+    keyword = 
+    alert("valide!!");
+  } else {
+    alert("not valide!!");
   }
 
 }

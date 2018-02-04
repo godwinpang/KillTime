@@ -7,9 +7,7 @@
 @import 'magnific-popup.css';
 
 #map {
-    position: static !important;
-    height: 50%;
-    width: 50%;
+    height: 100vh;
 }
 
 body {
