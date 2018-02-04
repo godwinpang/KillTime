@@ -16,24 +16,35 @@ var directionsService
  *          -1 if path is not walkable
  */
 
-function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
+ function getTimeBetweenTwo(startLng, startLat, destLng, destLat){
     var start = new google.maps.LatLng(startLng, startLat)
     var end = new google.maps.LatLng(destLng, destLat)
-    var service = new google.maps.DistanceMatrixService();
+    var service = new google.maps.DistanceMatrixService()
+    var duration
 
-    service.getDistanceMatrix(
+    var response = service.getDistanceMatrix(
         {
             origins: [start],
             destinations: [end],
             travelMode : google.maps.TravelMode["WALKING"]
         }, callback);
-    function callback(response, status){
-        if (status == 'OK'){
-            var duration = response.rows[0].elements[0].duration.value
-            console.log("duration: " + duration)
+
+        function callback(response, status){
+            if (status == 'OK'){
+                duration = response.rows[0].elements[0].duration.value
+
+                //console.log("duration: " + duration)
+                //return duration;
+            }
         }
-    }
+        setTimeout(function (){
+          return duration
+        }, 3000)
+        //return duration;
+
 }
+
+
 
 /**
  * This function takes in a 2D array of integers corresponding to longitudinal

@@ -1,5 +1,5 @@
 'use strict'
-
+//import {duration2} from "script.js";
 const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
 const API_HOST = "https://api.yelp.com";
 const SEARCH_PATH = "/v3/businesses/search";
@@ -7,13 +7,13 @@ const BUSINESS_PATH = "/v3/businesses/";
 const TOKEN_PATH = "/oauth2/token";
 const GRANT_TYPE = "client_credentials";
 
-const NODE_THRESHOLD = 20; // 31 nodes max for graph alg.
+const NODE_THRESHOLD = 15; // 31 nodes max for graph alg.
 
 
 const ACCESS_TOKEN = "g9p9BLtkh5mMy0q5hq4OES-H7hbCWetuC-AH0lWKvkcp4diO2unHx_HoxkgAg5Nl7LcJplMUJk_UGoEK9t6hVFodDefdHqcHc21qcA6qdaph4ZzBQjp5Awzla4B1WnYx";
 
 const DEFAULT_DURATION = 30; // default duration spent at each place (in minutes)
-const DEFAULT_WEIGHT = 2; // default weighting the user gives the node.
+const DEFAULT_WEIGHT = 10; // default weighting the user gives the node.
 
 // Global variables (with default values)
 var keywords = ['restaurants', 'food'];
@@ -43,6 +43,7 @@ var endLocation = document.getElementById("endLocation");
 var endTimeElem = document.getElementById("endTime");
 var submitButton = document.getElementById("submitButton");
 var keywordsArea = document.getElementById("keywords");
+var loadingField = document.getElementById("loading");
 
 var QTimeCode = document.getElementById("QTimeCode");
 
@@ -130,6 +131,7 @@ function retrieveParams() {
 async function updateSearchResults() {
 
   if(paramsValid) {
+    loadingField.value="Loading";
     var promises = [];
     var checked = 0;
     for(var i = 0; i < keywords.length; i++) {
@@ -225,11 +227,20 @@ async function getBusinessDetails() {
   createEdges();
 }
 // after adding all the nodes, iterate with double for loop
-function createEdges() {
+async function createEdges() {
   console.log("creating edges");
   for(var i = 0; i < locationIDs.length; i++) {
+    var startSplit = locationIDs[i].split(",");
+    var startLat = parseFloat(startSplit[0]);
+    var startLon = parseFloat(startSplit[1]);
     for(var j = 0; j < locationIDs.length; j++) {
+      var endSplit = locationIDs[j].split(",");
+      var endLat = parseFloat(endSplit[0]);
+      var endLon = parseFloat(endSplit[1]);
+      var timeBetween = Math.trunc(500 * Math.sqrt(Math.pow((startLat-endLat), 2) + Math.pow((startLon - endLon), 2)));
+      console.log(startLat + " " + startLon + " " + endLat + " " + endLon + " " + timeBetween);
       addEdge(locationIDs[i], locationIDs[j], DEFAULT_WEIGHT);
+      //addEdge(locationIDs[i], locationIDs[j], (timeBetween < 0 ? DEFAULT_WEIGHT : timeBetween ));
     }
   }
   console.log("done creating edges");
@@ -237,15 +248,19 @@ function createEdges() {
   if(checkComplete()) {
     ourLongPath = longPath(startLatitude + "," + startLongitude, endLatitude + "," + endLongitude, startTime, endTime);
     console.log("longPath executed");
+
+    var latAndLongArray = [];
+    for(var i = 0; i < ourLongPath.length; i++) {
+      var localArr = ourLongPath[i].split(",");
+      latAndLongArray = latAndLongArray.concat([[parseFloat(localArr[0]), parseFloat(localArr[1])]]);
+    }
+    console.log(latAndLongArray);
+
+    getMapFromPlaces(latAndLongArray);
+    loadingField.value="";
   }
+
   console.log("exiting createEdges");
-
-  var latAndLongArray = [];
-  for(var i = 0; i < ourLongPath.length; i++) {
-    latAndLongArray = latAndLongArray.concat(ourLongPath[i].split(","));
-  }
-
-  getMapFromPlaces(latAndLongArray);
 
 }
 
