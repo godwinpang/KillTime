@@ -1,69 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Meta -->
-    <meta charset = "utf-8">
-    <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
-    <meta name = "viewport" content="width=device-width, initial-scale=1">
-    <!-- Page title -->
-    <title> KillTime | Welcome </title>
-    <link rel = "stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <head>
+        <!-- Meta -->
+        <meta charset = "utf-8">
+        <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
+        <meta name = "viewport" content="width=device-width, initial-scale=1">
+        <!-- Page title -->
+        <title> QTime | Welcome </title>
+        <link rel = "stylesheet" href="./css/style.css">
+        <link rel = "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="Graph.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&libraries=places">
+        async defer></script>
+    </head>
 
-
-</head>
-
-    <body>
+    <body onload="initMap()">
       <!--The header bar of outwebpage !-->
       <header>
         <div class = "container">
           <div id = "topBar">
-          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> Kill Time </span></h1>
-          </div>
+          <h1><span class = "hightlight"><style="font-size:25pt!; font-style:bold"> QTime </span></h1> Find things to do while you wait!
+
           <nav>
             <ul>
-              <li class = "current"><a href = "index.html">Home</a></li>
-              <li class = "current"><a href = "about.html">About</a></li>
-              <li><div style="font-size:4em; color:Tomato">
-                <a class="loginButton" href="OUR LOGIN PAGE">
-                  <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+              <li>
+                <!-- <input onClick="this.focus()" id="shareText" type="url" placeholder="www.qtime.tech/wheee" size="40" readonly>
+
+                    <a class="loginButton" href="OUR LOGIN PAGE">
+                  <span class="fa fa-user fa-2x" aria-hidden="true"></span> -->
+
+              <button id="myBtn">Share your QTime! </button>
+
+              <!-- The Modal -->
+              <div id="myModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p style="font-size: 25px">Share your plans and trips!</p>
+                  <form>
+                  <input onClick="this.focus()" id="shareText" type="number" placeholder="Ex: 12345678" readonly>
+                  <input id="urlButton" type="button" value="Get Unique URL">
+                  <br>
+                  <p style="font-size: 15px"><h3>Share your QTimes to Friends Via Email:</h3></p>
+                  <input type="email" placeholder="Enter email here:" size="50px" style="border: 1px solid gray">
+                  <input type="submit" value="Send!">
+                  <p style="color: gray">Sample email: </p>
+                  <div class="boxed" style="border: 1px solid gray; font-family: serif">
+                    <p>Hey,</p>
+                    <p>I want to share a trip with you! This is the following code for Qtime: 12345678.</p>
+                    <p>Best,</p>
+                    <p>QTime Team. </p>
+                  </div>
+                  </form>
+                </div>
+
+              </div>
+
               </div></a></li>
             </ul>
           </nav>
+          </div>
         </div>
       </header>
 
-      <!--The description of the web -->
-      <section id = "description">
-        <div class = "container">
-          <h1>Some promotion line </h1>
-        </div>
-      </section>
 
       <!--The user input!-->
-      <section id = "userInput">
+    <form id = "userInput">
         <div class = "container">
-            <input type = "search" placeholder="Starting position:" >
-            <input type = "datetime-local">
-            <input type = "search" placeholder="Ending position:">
-            <input type = "datetime-local">
+            <input id="startLocation" type="text" placeholder="Where from?" size="30">
+            <input id="startTime" type="datetime-local" value="2018-02-04T12:00:00">
+            <span class="floatRight">Interests: <textarea id="keywords" rows="3" cols="35" placeholder="Enter each of your interests on new line.
+Ex. Chinese Food"></textarea>
+            </br>
+            <div id="loading">Hi!!</div>
+            </span>
 
-          <form action="/">
-              <input type="checkbox" name="Box1" value="food">Food<br>
-              <input type="checkbox" name="Box2" value="shopping">Shopping<br>
-              <input type="checkbox" name="Box3" value="coffee">Coffee<br>
-              <input type="submit" value="Submit">
-          </form>
 
-        </div>
-
-        <!--THIS IS THE PLACE TO INSERT THE MAP!-->
-        <div>
-
+          </br>
+            <input id="endLocation" type="text" placeholder="Where to?" size="30">
+            <input id="endTime" type="datetime-local" value="2018-02-04T15:00:00">
+            <p>or</p>
+            <p>Enter your QTime Code: <input id="QTimeCode" type = "text" placeholder="12345678">
+            <input id="submitButton" type="button" value="QTime!"></p>
 
 
         </div>
-      </section>
+
+    </form>
+
+
+    <!--THIS IS THE PLACE TO INSERT THE MAP-->
+    <div id = "map"></div>
 
       <!--More promotion!-->
       <section id = "boxes">
@@ -72,15 +99,15 @@
         <div class = "container">
           <div class = "box">
             <img src = "./img/food.jpg">
-            <p style>Good food</p>
+            <p style>Good Food</p>
           </div>
           <div class = "box">
             <img src = "./img/shopping.jpg">
-            <p>Nice shops</p>
+            <p>Nice Shops</p>
           </div>
           <div class = "box">
             <img src = "./img/events.jpeg">
-            <p>Fun events</p>
+            <p>Fun Events</p>
           </div>
           <div class = "box">
             <img src = "./img/spa.jpg">
@@ -88,15 +115,20 @@
           </div>
           <div class = "box">
             <img src = "./img/coffee.jpg">
-            <p style>Quiet bookstores</p>
+            <p style>Quiet Bookstores</p>
+          </div>
+          <div class = "box">
+            <img src = "./img/nature.jpg">
+            <p style>Fresh Air</p>
           </div>
         </div>
         <div style="text-align:center; font-size: 20 px; font-style:italic"><h3>in your spare time!!</h3></div>
       </section>
 
-      <footer>
-        <p></p>
-      </footer>
+      <script type="text/javascript" src="script.js"></script>
+      <script type="text/javascript" src="index.js"></script>
+
+
     </body>
 
 </html>
