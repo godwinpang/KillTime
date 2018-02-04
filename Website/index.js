@@ -127,6 +127,7 @@ async function updateSearchResults() {
         headers: {'Authorization': 'bearer ' + ACCESS_TOKEN},
         success: function(data) {
           console.log(data);
+          console.log(keywords[i]);
           searchResults = JSON.parse(JSON.stringify( data ));
         },
         error: function() {
