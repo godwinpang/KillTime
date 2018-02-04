@@ -27,9 +27,9 @@
 
           <nav>
             <ul>
-              <li class = "current"><a href = "index.html">Home</a></li>
-              <li class = "current"><a href = "about.html">About</a></li>
-              <li><div style="font-size:4em; color:Tomato">
+              <li>
+                <input onClick="this.focus()" id="shareText" type="url" placeholder="Share URL" size="30" readonly>
+
                 <a class="loginButton" href="OUR LOGIN PAGE">
                   <i class="fa fa-user fa-2x" aria-hidden="true"></i>
               </div></a></li>
@@ -43,35 +43,29 @@
       <!--The user input!-->
     <form id = "userInput">
         <div class = "container">
-            <input onClick="this.select();" id="startLocation" type="text" readonly>
+            <input id="startLocation" type="text" placeholder="Where from?" size="30">
             <input id="startTime" type="datetime-local">
+            <span class="floatRight">Interests: <textarea id="keywords" rows="3" cols="35" placeholder="Enter each of your interests on new line.
+Ex. Chinese Food"></textarea></span>
+
           </br>
-            <input onClick="this.select();" id="endLocation" type="text" value="Ending location" readonly>
+            <input id="endLocation" type="text" placeholder="Where to?" size="30">
             <input id="endTime" type="datetime-local">
-            <input  id="submitButton" type="submit" onClick="retrieveParams();" value="Explore">
+            <input id="submitButton" type="button" onClick="retrieveParams();" value="Explore">
+            <input id="button1" type="button" value="a">
+            <input id="button2" type="button" value="a">
+            <input id="button33" type="button" value="a">
         </div>
 
     </form>
 
     <!--THIS IS THE PLACE TO INSERT THE MAP-->
     <div id = "map"></div>
-    <span class = "container" height = "500px">
-
-      Keywords:</br>
-      <input id="keywordInput" type="text">
-      <input id="keywordButton" type="button" value="+">
-      <select id="mySelect" name="places" size="4" multiple>
-        <option value="Food">Food</option>
-        <option value="Beauty">Beauty</option>
-        <option value="Parks">Parks</option>
-        <option value="Store">Store</option>
-      </select>
-      <div id="keywords"></div>
-    </span>
 
 
 
-      <!--More promotion!-->
+
+      <!--More promotion!
       <section id = "boxes">
         <div style="text-align:center; font-style:italic"><h3> -------- Explore -------- </div></p>
 
@@ -106,7 +100,7 @@
 
       <footer>
         <p></p>
-      </footer>
+      </footer>-->
       <script type="text/javascript" src="index.js"></script>
     </body>
 
