@@ -240,7 +240,18 @@ function createEdges() {
   }
   console.log("exiting createEdges");
 
+  var latAndLongArray = [];
+  for(var i = 0; i < ourLongPath.length; i++) {
+    latAndLongArray = latAndLongArray.concat(ourLongPath[i].split(","));
+  }
+
+  getMapFromPlaces(latAndLongArray);
+
 }
+
+
+
+
 
 
 

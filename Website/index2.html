@@ -11,9 +11,11 @@
         <link rel = "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="Graph.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&libraries=places">
+        async defer></script>
     </head>
 
-    <body>
+    <body onload="initMap()">
       <!--The header bar of outwebpage !-->
       <header>
         <div class = "container">
@@ -119,13 +121,9 @@ Ex. Chinese Food"></textarea></span>
         <div style="text-align:center; font-size: 20 px; font-style:italic"><h3>in your spare time!!</h3></div>
       </section>
 
-      <footer>
-        <p></p>
-      </footer>
-      <script type="text/javascript" src="index.js"></script>
       <script type="text/javascript" src="script.js"></script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTelWRRVM3YuLnQGbEqqJ3gRnS-NXQWbs&libraries=places&callback=initMap">
-      async defer></script>
+      <script type="text/javascript" src="index.js"></script>
+
 
     </body>
 

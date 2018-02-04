@@ -3,8 +3,8 @@ var map
 var startMarker
 var endMarker
 var centerPt
-var directionsDisplay = new google.maps.DirectionsRenderer
-var directionsService = new google.maps.DirectionsService
+var directionsDisplay
+var directionsService
 
 /**
  * This function takes in the longitudes and latitudes of the starting and
@@ -48,7 +48,7 @@ function getMapFromPlaces(places){
     }
     for (j = 0 ; j < stops.length ; j++){
         for (k = 0 ; k < 2 ; k++){
-            stops[j][k] = places[i][k]
+            stops[j][k] = places[j+1][k]
         }
     }
 
@@ -108,6 +108,8 @@ function initMap(){
         zoom: 7,
         center: {lat: 33.653334, lng: -117.839316}
     })
+    directionsDisplay = new google.maps.DirectionsRenderer
+    directionsService = new google.maps.DirectionsService
     directionsDisplay.setMap(map)
     //getMapFromPlaces(directionsService, directionsDisplay, places)
 
@@ -255,8 +257,6 @@ function getEnd(){
     retArr[1] = endMarker[0].getPosition().lng()
     return retArr
 }
-
-function get
 
 /**
  * This function returns an array of size 3 holding the following vars in the
