@@ -237,10 +237,11 @@ async function createEdges() {
       var endSplit = locationIDs[j].split(",");
       var endLat = parseFloat(endSplit[0]);
       var endLon = parseFloat(endSplit[1]);
-      var timeBetween = Math.trunc(2000 * Math.sqrt(Math.pow((startLat-endLat), 2) + Math.pow((startLon - endLon), 2)));
+      var timeBetween = Math.trunc(2000 * Math.sqrt(Math.pow((startLat-endLat),
+              2) + Math.pow((startLon - endLon), 2))) + 1;
       console.log(startLat + " " + startLon + " " + endLat + " " + endLon + " " + timeBetween);
-      addEdge(locationIDs[i], locationIDs[j], DEFAULT_WEIGHT);
-      //addEdge(locationIDs[i], locationIDs[j], (timeBetween < 0 ? DEFAULT_WEIGHT : timeBetween ));
+      //addEdge(locationIDs[i], locationIDs[j], DEFAULT_WEIGHT);
+      addEdge(locationIDs[i], locationIDs[j], timeBetween);//(timeBetween >= 0 ? timeBetween : 0));
     }
   }
   console.log("done creating edges");

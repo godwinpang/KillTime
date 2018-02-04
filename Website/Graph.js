@@ -17,12 +17,15 @@ function addNode(name, open, close, duration, rating) {
 
 // Add an edge to the graph
 function addEdge(name1, name2, weight) {
+    console.log("Adding edge of weight " + weight + " between " + name1 
+        + " and " + name2);
     // Check if the first name is in the list of source nodes
     for (i = 0; i < this.Graph[1].length; i++) {
         if (this.Graph[1][i][0] === name1) {
             // Check if the second name is in the list of destinations
             for (j = 0; j < this.Graph[0].length; j++) {
                 if (this.Graph[0][j][0] === name2) {
+                    console.log("successfully added edge");
                     this.Graph[1][i][j + 1] = weight;
                     if (weight > maxWeight) maxWeight = weight;
                 }
@@ -75,7 +78,10 @@ function checkComplete() {
     for (i = 0; i < this.Graph[1].length; i++) {
         if (!(size === this.Graph[1][i].length - 1)) return false;
         for (j = 1; j < size + 1; j++) {
-            if (!(this.Graph[1][i][j])) return false;
+            if (!(this.Graph[1][i][j])) {
+              console.log(i + " " + j);
+              return false;
+            }
         }
     }
     return true;
